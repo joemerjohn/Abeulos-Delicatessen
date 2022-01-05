@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %} Admin - Order Page {%endblock%}
+{% block h1PageTitle %}<h5>Admin - Order Page </h5>{% endblock %}
+
+{%block content%}
+  <main id="main">
+
+    <!-- ======= Breadcrumbs Section ======= -->
+    <section class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <!-- <h2>Admin Page</h2> -->
+          <ol>
+            <li><a href="/orders">Orders</a></li>
+            <li>List of Orders</li>
+          </ol>
+        </div>
+
+      </div>
+    </section><!-- End Breadcrumbs Section -->
+
+    <section class="inner-page">
+      <div class="container">
+          <div class="row">
+            <div class="col-md">
+            <div class="table-responsive">
+              <table id="list_of_orders" class="table table-striped align-middle" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Delivery Address</th>
+                        <th>Email</th>
+                        <th>Contact #</th>
+                        <!-- <th>Order Qty</th> -->
+                        <th>Order Status</th>
+                        <th>Order Date</th>
+                        <th>Controls</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                </table>
+                </div>
+            </div>
+          </div>
+      </div>
+    </section>
+
+  </main>
+  <!-- End #main -->
+
+
+
+  {% endblock %}
+
+  {%block jsperfile%}
+<script type="text/javascript">
+ 
+//$(document).ready(function() {
+
+    var products_table = $('#list_of_orders').DataTable( {
+        dom: "QBftrip",
+        "ajax": {
+            "method" : "GET",
+            "url": "/orders/orders-get",
+            "dataSrc": ""
+        },
+        "columns": [
+            { "data": "id" },
+            {
+              data: null,
+              render: function ( data, type, row ) {
+                return `${data.last_name}, ${data.first_name} ${data.middle_name}`;
+              }
+            },
+            { "data": "address" },
+            { "data": "email_address" },
+            { "data": "contact_number" },
+          //  { "data": "order_qty" },
+            { "data": "order_status" },
+            {
+            data: null, 
+            render: function (data, type, row) { 
+              var d = new Date(data.timestamp);
+              var curr_day = d.getDate();
+              var curr_month = d.getMonth() + 1; //Months are zero based
+              var curr_year = d.getFullYear();
+              var finaldate = curr_year + "-" + curr_month + "-" + curr_day;
+              return d.toLocaleDateString()
+             }
+          },
+            {
+              data: null,
+              render: function ( data, type, row ) {
+                return `<a href="orders-details/${data.invoice}" class="btn btn-outline-info btn-sm m-2" title="View Order Details" id="${data.invoice}"><i class="bi bi-eye-fill"></i></a>`;
+              }
+            }
+            // { "data": "salary" }
+        ]
+    } );
+
+
+
+
+  function view_order(id){
+    console.log(id)
+    fetch('/orders/orders-details', {
+      method: 'POST',
+      body: JSON.stringify({'invoice':id})
+    })
+    .then(response => {
+      if (res.redirected) {
+        if (res.redirected) {
+            window.location.href = res.url
+            }else{
+              response.json()
+           }  
+      }
+      
+    })
+    .then(data => console.log(data));
+
+  }
+
+</script>
+{%endblock%}

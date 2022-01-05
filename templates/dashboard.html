@@ -1,0 +1,454 @@
+{% extends 'base.html' %}
+
+{% block title %} Admin Page {%endblock%}
+{% block h1PageTitle %}<h5>Admin Page </h5>{% endblock %}
+
+{%block cssperfile %}
+<style>
+  .btn-close{
+    z-index: 999;
+    /* right: 120px; */
+  }
+  .image-container {
+  width: 100%;
+  height: 150px;
+  position: relative;
+}
+.image-container img {
+  width: 100%;
+  height: 100%;
+}
+
+  .image-container .btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  /* background-color: #555; */
+  color: white;
+  /* font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px; */
+}
+
+.image-container .btn:hover {
+  background-color: black;
+}
+</style>
+{%endblock%}
+
+{%block content%}
+  <main id="main" class="mt-5-sm">
+
+    <!-- ======= Breadcrumbs Section ======= -->
+    <section class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <!-- <h2>Admin Page</h2> -->
+          <ol>
+            <li><a href="/dashboard">Home</a></li>
+            <li>Dashboard</li>
+          </ol>
+        </div>
+
+      </div>
+    </section><!-- End Breadcrumbs Section -->
+
+    <section class="inner-page">
+      <div class="container">
+          <div class="row mb-5">
+            <div class="col-md">
+              <a class="btn book-a-table-btn" data-bs-toggle="modal" data-bs-target="#addProduct" onclick="add_product_btn()">Add Product</a>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md">
+            <div class="table-responsive">
+              <table id="list_of_products" class="table table-striped align-middle" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Category</th>
+                        <th>Images</th>
+                        <th>Controls</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                </table>
+                </div>
+            </div>
+          </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+   <!-- Modal -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" id="addProduct">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Add Product</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="#" method="POST" id="add_product_form" enctype="multipart/form-data">
+        <input type="hidden" value="" id="add_or_update" name="add_or_update">
+        <input type="hidden" value="" id="product_id" name="product_id">
+        <div class="modal-body container">
+          <div class="row">
+            <div class="col-md">
+              <!-- <div class="d-sm-flex flex-row"> -->
+                <div class="form-group">
+                  <label for="product_title">Product Title</label>
+                  <input type="text" class="form-control" id="product_title" name="product_title">
+                </div>
+              <!-- </div> -->
+            </div>
+            <div class="col-md">
+              <div class="form-group">
+                <label for="product_price">Product Price</label>
+                <input type="number" class="form-control" id="product_price" name="product_price">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md">
+              <!-- <div class="d-sm-flex flex-row"> -->
+                <div class="form-group">
+                  <label for="product_qty">Product Quantity</label>
+                  <input type="number" class="form-control" id="product_qty" name="product_qty">
+                </div>
+              <!-- </div> -->
+            </div>
+          </div>
+          <div class="row" id="product_images_control">
+            <div class="col-md">
+              <!-- <div class="d-sm-flex flex-row"> -->
+                <div class="form-group">
+                  <label for="product_qty">Product Images</label>
+                  <input type="file" class="form-control" id="product_images" name="product_images[]" multiple>
+                  <!-- <small>Max is three (3) images</small> -->
+                </div>
+              <!-- </div> -->
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md">
+              <!-- <div class="d-sm-flex flex-row"> -->
+                <div class="form-group">
+                  <label for="product_qty">Product Category</label>
+                  <!-- <input type="text" class="form-control" id="product_category" name="product_category"> -->
+                  <select class="form-control" id="product_category" name="product_category">
+                    <option value="Meat">Meat</option>
+                    <option value="Seafood">Seafood</option>
+                    <option value="Others">Others</option>
+                  </select>
+                </div>
+              <!-- </div> -->
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md">
+              <!-- <div class="d-sm-flex flex-row"> -->
+                <div class="form-group">
+                  <label for="product_description">Product Description</label>
+                  <textarea type="text" class="form-control" id="product_description" name="product_description" rows="8"></textarea>
+                </div>
+              <!-- </div> -->
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn book-a-table-btn" id="add_product_button">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" id="showImages">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Product Images</h3>
+        <div class="modal-body container">
+          
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+    </div>
+  </div>
+</div> -->
+
+<!-- Modal -->
+<div class="modal fade" id="showImages" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="showImages">Product Images</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+            <!-- ======= Gallery Section ======= -->
+    <section id="gallery" class="gallery m-1 p-1">
+      <div class="container-fluid">
+
+        <div class="row no-gutters" id="gallery_items">
+
+          <!-- <div class="col-lg-3 col-md-4 px-1">
+            <div class="gallery-item">
+              <a href="{{ url_for('static', filename = '/img/gallery/gallery-1.jpg') }}" class="gallery-lightbox">
+                <div class="image-container">
+                  <img src="{{ url_for('static', filename = '/img/gallery/gallery-1.jpg') }}" alt="" class="img-fluid">
+                  <button type="button" class="btn btn-sm-danger">Remove</button>
+                </div>
+              </a>
+            </div>
+          </div> -->
+  
+        </div>
+
+      </div>
+    </section><!-- End Gallery Section -->
+      </div>
+      <div class="modal-footer text-start">
+        <form action="#" method="POST" id="upload_new_images_form" enctype="multipart/form-data">
+          <input type="hidden" name="images_product_title" id="images_product_title">
+          <input type="hidden" name="images_product_id" id="images_product_id">
+          <div class="row me-auto float-start">
+            <div class="col-sm-8 text-start mb-2">
+                <input type="file" class="form-control" id="product_images" name="product_images[]" multiple>
+            </div>
+            <div class="col-sm-4 text-sm-center text-lg-left">
+              <button type="submit" class="btn btn-primary">Upload</button>
+            </div>
+          </div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  {% endblock %}
+
+  {%block jsperfile%}
+
+
+
+
+<script type="text/javascript">
+
+  var loader = setInterval(function () {
+    if(document.readyState !== "complete") return;
+    clearInterval(loader);
+      
+  }, 300);
+  function add_product_btn(){
+    document.getElementById('product_images_control').style.display = 'block'
+    document.getElementById('add_or_update').value = 'add'
+    document.getElementById('modal-title').innerHTML = 'Add Product'; 
+    document.getElementById('add_product_button').innerHTML = 'Add'
+    document.getElementById('product_title'). value = ""
+    document.getElementById('product_price'). value = ""
+    document.getElementById('product_qty'). value = ""
+    document.getElementById('product_description'). value = ""
+  }
+  function delete_product(e){
+    Swal.fire({
+      icon: 'warning',
+      title: 'Are you sure you want to delete?',
+      showCancelButton: true,
+      confirmButtonText: 'Delete',
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        fetch('/product/product-delete', {
+        method: 'POST',
+        body: JSON.stringify({"product_id": e.id}),
+          }).then(response => response.json())
+          .then(result => {
+            products_table.ajax.reload()
+            Swal.fire('Successfully Deleted!', '', 'success')
+          })
+      }
+    })
+}
+  function edit_product(e){
+      //  e.preventDefault()
+      document.getElementById('add_or_update').value = 'edit'
+      document.getElementById('modal-title').innerHTML = 'Edit Product'
+      document.getElementById('add_product_button').innerHTML = 'Update'
+      document.getElementById('product_images_control').style.display = 'none'
+      
+      fetch('/product/product-get', {
+        method: 'POST',
+        body: JSON.stringify({"id": e.id}),
+          }).then(response => response.json())
+          .then(data => {
+
+            document.getElementById('product_title'). value = data.product_title
+            document.getElementById('product_price'). value = data.product_price
+            document.getElementById('product_qty'). value = data.product_qty
+            document.getElementById('product_description'). value = data.product_description
+            document.getElementById('product_id'). value = data.id
+            document.getElementById('product_category'). value = data.product_category
+
+
+          })
+  }
+//$(document).ready(function() {
+
+    var products_table = $('#list_of_products').DataTable( {
+        "ajax": {
+            "method" : "GET",
+            "url": "/product/product-get",
+            "dataSrc": ""
+        },
+        "columns": [
+            { "data": "id" },
+            { "data": "product_title" },
+            { "data": "product_price" },
+            { "data": "product_qty" },
+            { "data": "product_category" },
+            {
+              data: null,
+              render: function ( data, type, row ) {
+                return `<a class="btn book-a-table-btn" data-bs-toggle="modal" data-bs-target="#showImages" onclick="show_images(${data.id})">Show</a>`
+               // return '<button class="btn btn-primary btn-sm" id="'+data.id+'">View</button>';
+              }
+            },
+            {
+              data: null,
+              render: function ( data, type, row ) {
+                return '<a class="btn btn-warning btn-sm m-2" data-bs-toggle="modal" data-bs-target="#addProduct" title="View this Product" id="'+data.id+'" onclick="edit_product(this)"><i class="bi bi-eye-fill"></i></a><a class="btn btn-danger btn-sm m-2" title="Remove this Product" id="'+data.id+'" onclick = "delete_product(this)"><i class="bi bi-trash"></i></a>';
+              }
+            }
+            // { "data": "salary" }
+        ]
+    } );
+
+function show_images(id){
+  document.getElementById('gallery_items').innerHTML = "";
+  fetch('/product/product-get', {
+        method: 'POST',
+        body: JSON.stringify({"id": id}),
+          })
+          .then(response => response.json())
+          .then(data => {
+           // console.log(data.product_image)
+            document.getElementById('images_product_title').value = data.product_title;
+            document.getElementById('images_product_id').value = data.id;
+
+            data.product_image.forEach((currentValue, index, arr)=>{
+              console.log(currentValue.file_name)
+              document.getElementById('gallery_items').innerHTML += `
+              <div class="col-lg-3 col-md-4 px-1" id="g_item_${currentValue.id}">
+                <div class="gallery-item">
+                    <div class="image-container">
+                      <img src="/static/img/product_images/${currentValue.file_name}" alt="" class="img-fluid">
+                      <button type="button" class="btn btn-sm-danger" onclick="fade('g_item_${currentValue.id}', ${currentValue.id}, ${id});">Remove</button>
+                    </div>
+                </div>
+              </div>
+              `
+            })
+          });
+}
+
+function fade(id, image_id, product_id) {
+    var element = document.getElementById(id);
+    var op = 1;  // initial opacity
+    var timer = setInterval(function () {
+        if (op <= 0.1){
+            clearInterval(timer);
+            element.style.display = 'none';
+            remove_product_image(image_id, product_id)
+        }
+        element.style.opacity = op;
+        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+        op -= op * 0.1;
+
+    }, 20);
+}
+
+
+function remove_product_image(image_id, product_id){
+  fetch('/product/remove-product-images', {
+        method: 'POST',
+        body: JSON.stringify({'image_id': image_id}),
+          })
+          .then(response => response.json())
+          .then(resdata => {
+            show_images(product_id)
+              
+           })
+}
+
+  var add_product_form = document.getElementById("add_product_form");
+  add_product_form.addEventListener("submit",(e)=>{
+      e.preventDefault()
+      let productData = new FormData(add_product_form);
+      
+      const data = {}
+      productData.forEach((value, key) => (data[key] = value))
+
+      console.log(data)
+
+      fetch('/product/add-product', {
+        method: 'POST',
+        body: productData,
+          }).then((res)=>{
+            console.log(res)
+            products_table.ajax.reload()
+            add_product_form.reset()
+            $('#addProduct').modal('hide');
+            Toast.fire({
+            icon: 'success',
+            title: 'Product added successfully!'
+                 })
+   
+
+            //     if (res.redirected) {
+            //   window.location.href = res.url
+            // }else{
+              
+            // }
+      })
+    
+  })
+
+  var upload_new_images_form = document.getElementById("upload_new_images_form");
+  upload_new_images_form.addEventListener("submit",(e)=>{
+      e.preventDefault()
+      let images = new FormData(upload_new_images_form);
+      
+      const data = {}
+      images.forEach((value, key) => (data[key] = value))
+
+      console.log(data)
+
+      fetch('/product/add-product-images', {
+        method: 'POST',
+        body: images,
+          })
+          .then(response => response.json())
+          .then(resdata => {
+            show_images(data.images_product_id)
+              
+           })
+    
+  })
+
+//} ); //dulo ng document load
+</script>
+{%endblock%}
